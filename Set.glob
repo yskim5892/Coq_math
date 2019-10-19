@@ -1,0 +1,157 @@
+DIGEST e5075f83ebcae012ee0049b783be35ad
+FSet
+ax 10:12 <> set
+ax 32:33 <> In
+R40:43 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R47:50 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R44:46 Set <> set defax
+R37:39 Set <> set defax
+R81:82 Set <> In defax
+not 67:67 <> :::x_'∈'_x
+R127:128 Set <> In defax
+not 113:113 <> :::x_'∋'_x
+def 162:167 <> subset
+R175:177 Set <> set defax
+R199:201 Set <> set defax
+R211:214 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R216:220 Set <> :::x_'∈'_x not
+R215:215 Set <> x var
+R221:221 Set <> B var
+R205:209 Set <> :::x_'∈'_x not
+R204:204 Set <> x var
+R210:210 Set <> A var
+R248:253 Set <> subset def
+not 234:234 <> :::x_'⊆'_x
+R298:303 Set <> subset def
+not 284:284 <> :::x_'⊇'_x
+prf 334:349 <> subset_reflexive
+R365:367 Set <> set defax
+R372:376 Set <> :::x_'⊆'_x not
+R371:371 Set <> A var
+R377:377 Set <> A var
+R402:407 Set <> subset def
+prf 441:457 <> subset_transitive
+R477:479 Set <> set defax
+R501:504 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R506:510 Set <> :::x_'⊆'_x not
+R505:505 Set <> A var
+R511:511 Set <> C var
+R490:493 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R484:488 Set <> :::x_'⊆'_x not
+R483:483 Set <> A var
+R489:489 Set <> B var
+R495:499 Set <> :::x_'⊆'_x not
+R494:494 Set <> B var
+R500:500 Set <> C var
+R542:547 Set <> subset def
+ax 617:618 <> Φ
+R622:624 Set <> set defax
+ax 633:650 <> Axiom_of_Existence
+R663:665 Set <> set defax
+R668:670 Coq.Init.Logic <> not def
+R674:678 Set <> :::x_'∈'_x not
+R673:673 Set <> x var
+R679:680 Set <> Φ defax
+ax 691:713 <> Axiom_of_Extensionality
+R731:733 Set <> set defax
+R737:737 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R771:775 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R777:779 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R776:776 Set <> A var
+R780:780 Set <> B var
+R747:749 Set <> set defax
+R759:763 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R753:757 Set <> :::x_'∈'_x not
+R752:752 Set <> x var
+R758:758 Set <> A var
+R765:769 Set <> :::x_'∈'_x not
+R764:764 Set <> x var
+R770:770 Set <> B var
+prf 792:811 <> subset_antisymmetric
+R829:831 Set <> set defax
+R853:856 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R858:860 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R857:857 Set <> A var
+R861:861 Set <> B var
+R842:845 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R836:840 Set <> :::x_'⊆'_x not
+R835:835 Set <> A var
+R841:841 Set <> B var
+R847:851 Set <> :::x_'⊆'_x not
+R846:846 Set <> B var
+R852:852 Set <> A var
+R885:907 Set <> Axiom_of_Extensionality prfax
+R885:907 Set <> Axiom_of_Extensionality prfax
+R931:936 Set <> subset def
+R952:957 Set <> subset def
+R983:985 Coq.Init.Logic <> iff def
+R994:997 Coq.Init.Logic <> conj constr
+R994:997 Coq.Init.Logic <> conj constr
+ax 1032:1050 <> Axiom_of_Regularity
+R1065:1067 Set <> set defax
+R1070:1070 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1093:1098 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1166:1166 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1099:1105 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R1113:1114 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R1110:1112 Set <> set defax
+R1122:1125 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R1116:1120 Set <> :::x_'∈'_x not
+R1115:1115 Set <> B var
+R1121:1121 Set <> A var
+R1126:1128 Coq.Init.Logic <> not def
+R1131:1137 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R1145:1146 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R1142:1144 Set <> set defax
+R1154:1157 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R1148:1152 Set <> :::x_'∈'_x not
+R1147:1147 Set <> C var
+R1153:1153 Set <> A var
+R1159:1163 Set <> :::x_'∈'_x not
+R1158:1158 Set <> C var
+R1164:1164 Set <> B var
+R1071:1077 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R1084:1085 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R1081:1083 Set <> set defax
+R1087:1091 Set <> :::x_'∈'_x not
+R1086:1086 Set <> B var
+R1092:1092 Set <> A var
+ax 1176:1191 <> Axiom_of_Pairing
+R1209:1211 Set <> set defax
+R1215:1221 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R1223:1224 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R1232:1235 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R1226:1230 Set <> :::x_'∈'_x not
+R1225:1225 Set <> A var
+R1231:1231 Set <> C var
+R1237:1241 Set <> :::x_'∈'_x not
+R1236:1236 Set <> B var
+R1242:1242 Set <> C var
+ax 1252:1265 <> Axiom_of_Union
+R1281:1283 Set <> set defax
+R1287:1293 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R1295:1296 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R1310:1312 Set <> set defax
+R1334:1337 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1339:1343 Set <> :::x_'∈'_x not
+R1338:1338 Set <> x var
+R1344:1344 Set <> U var
+R1323:1326 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R1317:1321 Set <> :::x_'∈'_x not
+R1316:1316 Set <> x var
+R1322:1322 Set <> y var
+R1328:1332 Set <> :::x_'∈'_x not
+R1327:1327 Set <> y var
+R1333:1333 Set <> A var
+ax 1354:1370 <> Axiom_of_Powerset
+R1386:1388 Set <> set defax
+R1392:1398 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R1400:1401 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R1414:1416 Set <> set defax
+R1427:1430 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1432:1436 Set <> :::x_'∈'_x not
+R1431:1431 Set <> x var
+R1437:1437 Set <> B var
+R1421:1425 Set <> :::x_'⊆'_x not
+R1420:1420 Set <> x var
+R1426:1426 Set <> A var
