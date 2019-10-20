@@ -1,4 +1,4 @@
-DIGEST 15fc8834470e1b9cdc67a299578e0c54
+DIGEST 39b04e8fbd4bda851ebf5de6f448301d
 FLogic_utils
 ax 6:27 <> law_of_excluded_middle
 R51:54 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
@@ -87,21 +87,73 @@ R893:897 Coq.Init.Logic <> proj1 thm
 R893:897 Coq.Init.Logic <> proj1 thm
 R918:922 Coq.Init.Logic <> proj2 thm
 R918:922 Coq.Init.Logic <> proj2 thm
-prf 983:991 <> not_not_P
-R1026:1030 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R1015:1017 Coq.Init.Logic <> not def
-R1020:1022 Coq.Init.Logic <> not def
-R1024:1024 Logic_utils <> P var
-R1031:1031 Logic_utils <> P var
-R1064:1067 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
-R1068:1068 Coq.Init.Logic <> ::type_scope:'~'_x not
-R1064:1067 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
-R1068:1068 Coq.Init.Logic <> ::type_scope:'~'_x not
-R1081:1102 Logic_utils <> law_of_excluded_middle prfax
-R1081:1102 Logic_utils <> law_of_excluded_middle prfax
-R1131:1133 Coq.Init.Logic <> iff def
-R1142:1145 Coq.Init.Logic <> conj constr
-R1142:1145 Coq.Init.Logic <> conj constr
-R1228:1230 Coq.Init.Logic <> iff def
-R1239:1242 Coq.Init.Logic <> conj constr
-R1239:1242 Coq.Init.Logic <> conj constr
+prf 966:974 <> not_not_P
+R1009:1013 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R998:1000 Coq.Init.Logic <> not def
+R1003:1005 Coq.Init.Logic <> not def
+R1007:1007 Logic_utils <> P var
+R1014:1014 Logic_utils <> P var
+R1047:1050 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R1051:1051 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1047:1050 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R1051:1051 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1064:1085 Logic_utils <> law_of_excluded_middle prfax
+R1064:1085 Logic_utils <> law_of_excluded_middle prfax
+R1114:1116 Coq.Init.Logic <> iff def
+R1125:1128 Coq.Init.Logic <> conj constr
+R1125:1128 Coq.Init.Logic <> conj constr
+R1199:1201 Coq.Init.Logic <> iff def
+R1210:1213 Coq.Init.Logic <> conj constr
+R1210:1213 Coq.Init.Logic <> conj constr
+prf 1284:1299 <> iff_iff_compat_l
+R1324:1324 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1332:1337 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1361:1361 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1338:1338 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1346:1352 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1360:1360 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1340:1344 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1339:1339 Logic_utils <> A var
+R1345:1345 Logic_utils <> B var
+R1354:1358 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1353:1353 Logic_utils <> A var
+R1359:1359 Logic_utils <> C var
+R1326:1330 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1325:1325 Logic_utils <> B var
+R1331:1331 Logic_utils <> C var
+R1385:1394 Coq.Init.Logic <> iff_to_and thm
+R1385:1394 Coq.Init.Logic <> iff_to_and thm
+R1403:1406 Coq.Init.Logic <> conj constr
+R1403:1406 Coq.Init.Logic <> conj constr
+R1425:1433 Coq.Init.Logic <> iff_trans thm
+R1425:1433 Coq.Init.Logic <> iff_trans thm
+R1483:1491 Coq.Init.Logic <> iff_trans thm
+R1483:1491 Coq.Init.Logic <> iff_trans thm
+R1522:1528 Coq.Init.Logic <> iff_sym thm
+R1522:1528 Coq.Init.Logic <> iff_sym thm
+prf 1554:1569 <> iff_iff_compat_r
+R1594:1594 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1602:1607 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1631:1631 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1608:1608 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1616:1622 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1630:1630 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1610:1614 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1609:1609 Logic_utils <> B var
+R1615:1615 Logic_utils <> A var
+R1624:1628 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1623:1623 Logic_utils <> C var
+R1629:1629 Logic_utils <> A var
+R1596:1600 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1595:1595 Logic_utils <> B var
+R1601:1601 Logic_utils <> C var
+R1655:1664 Coq.Init.Logic <> iff_to_and thm
+R1655:1664 Coq.Init.Logic <> iff_to_and thm
+R1673:1676 Coq.Init.Logic <> conj constr
+R1673:1676 Coq.Init.Logic <> conj constr
+R1695:1703 Coq.Init.Logic <> iff_trans thm
+R1695:1703 Coq.Init.Logic <> iff_trans thm
+R1724:1730 Coq.Init.Logic <> iff_sym thm
+R1724:1730 Coq.Init.Logic <> iff_sym thm
+R1768:1776 Coq.Init.Logic <> iff_trans thm
+R1768:1776 Coq.Init.Logic <> iff_trans thm

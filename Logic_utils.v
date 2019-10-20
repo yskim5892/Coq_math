@@ -46,3 +46,19 @@ inversion lem.
   + intros. contradiction.
   + intros. contradiction.
 Qed.
+
+Theorem iff_iff_compat_l : forall A B C : Prop,
+(B <-> C) -> ((A <-> B) <-> (A <-> C)).
+Proof.
+intros. apply iff_to_and. apply conj.
+- intros. apply iff_trans with (B:=B). apply H0. apply H.
+- intros. apply iff_trans with (B:=C). apply H0. apply iff_sym. apply H.
+Qed.
+
+Theorem iff_iff_compat_r : forall A B C : Prop,
+(B <-> C) -> ((B <-> A) <-> (C <-> A)).
+Proof.
+intros. apply iff_to_and. apply conj.
+- intros. apply iff_trans with (B:=B). apply iff_sym. apply H. apply H0.
+- intros. apply iff_trans with (B:=C). apply H. apply H0.
+Qed.
