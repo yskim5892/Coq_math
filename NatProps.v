@@ -93,6 +93,13 @@ rewrite IHn. rewrite n_plus_assoc. rewrite n_plus_comm with (n:=k). rewrite n_pl
 rewrite <- n_plus_assoc. rewrite H. rewrite n_plus_assoc. reflexivity.
 Qed.
 
+Theorem n_right_distributive : forall (n m k : nat),
+  (n + m) * k = n * k + m * k.
+Proof.
+intros. rewrite n_mul_comm. rewrite n_mul_comm with (n:=n). rewrite n_mul_comm with (n:=m).
+apply n_distributive.
+Qed.
+
 Theorem n_mul_assoc : forall (n m k : nat),
   n * (m * k) = (n * m) * k.
 Proof.

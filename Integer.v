@@ -84,11 +84,11 @@ Proof.
 intros. destruct a, b, c. simpl.
 assert (H: forall (k k0 k1 l l0 l1: nat),
   k * (k0 + k1) + l * (l0 + l1) = k * k0 + l * l0 + (k * k1 + l * l1)).
-intros.
+{ intros.
 rewrite n_distributive with (n:=k). rewrite n_distributive with (n:=l).
-rewrite n_plus_assoc. rewrite <- n_plus_assoc with (k:=l*l0). rewrite n_plus_comm with (n:=k*k1).
-rewrite n_plus_assoc. rewrite <- n_plus_assoc with (k:=l*l1). reflexivity.
-
+set (a:=k*k0). set (b:=k*k1). set (c:=l*l0). set (d:=l*l1).
+rewrite n_plus_assoc. rewrite <- n_plus_assoc with (k:=c). rewrite n_plus_comm with (n:=b).
+rewrite n_plus_assoc. rewrite <- n_plus_assoc with (k:=d). reflexivity. }
 rewrite H. rewrite H with (k:=n)(l:=m). reflexivity.
 Qed.
 
@@ -99,19 +99,17 @@ intros. destruct a, b, c. simpl.
 assert (H : forall (k k0 k1 l l0 l1: nat), 
   k * (k0 * k1 + l0 * l1) + l * (k0 * l1 + l0 * k1) = (k * k0 + l * l0) * k1 + (k * l0 + l * k0) * l1).
 intros.
-rewrite n_distributive with (n:=k). rewrite n_distributive with (n:=l).
-rewrite n_mul_assoc. rewrite n_mul_assoc. rewrite n_mul_assoc with (n:=l).
-rewrite n_plus_assoc. rewrite n_plus_comm.
-rewrite n_mul_comm with (m:=l1). rewrite n_mul_comm with (m:=l1). 
-rewrite <- n_plus_assoc. rewrite <- n_distributive with (n:=l1). rewrite n_mul_comm with (n:=l1).
-rewrite n_plus_assoc. rewrite n_mul_assoc with (k:=k1).
-rewrite n_mul_comm with (m:=k1). rewrite n_mul_comm with (m:=k1).
-rewrite <- n_distributive with (n:=k1). rewrite n_mul_comm with (n:=k1).
-rewrite n_plus_comm with (n:=l*l0). reflexivity.
-
+{ rewrite n_distributive with (n:=k). rewrite n_distributive with (n:=l).
+rewrite n_right_distributive with (k:=k1). rewrite n_right_distributive with (k:=l1).
+rewrite n_mul_assoc. set (a:=k*k0*k1).
+rewrite n_mul_assoc. set (b:=k*l0*l1).
+rewrite n_mul_assoc. set (c:=l*k0*l1).
+rewrite n_mul_assoc. set (d:=l*l0*k1).
+rewrite <- n_plus_assoc with (k:=b+c). rewrite n_plus_comm with (n:=d).
+rewrite <- n_plus_assoc with (n:=a). rewrite n_plus_assoc with (n:=b).
+reflexivity. }
 rewrite H. rewrite H with (k:=n)(l:=m). reflexivity.
 Qed.
-
 
 (* inequality *)
 
@@ -153,19 +151,13 @@ Theorem z_le_transitive : forall (a b c : Z),
   z_le(a, b) /\ z_le(b, c) -> z_le(a, c).
 Proof.
 destruct a, b, c. simpl. intros.
-apply proj1 in H as H1. apply proj2 in H as H2.
-assert (H3 : (n + m0 <= n0 + m) /\ (n0 + m1 <= n1 + m0)).
-{ apply conj. apply H1. apply H2. }
-apply n_le_sum in H3. 
-rewrite n_plus_comm with (n:=n0) in H3. rewrite n_plus_comm with (n:=n0) in H3.
-rewrite n_plus_comm with (n:=m+n0) in H3. rewrite n_plus_assoc in H3.
-rewrite n_plus_assoc with (k:=n0) in H3. 
-apply n_le_plus in H3.
-rewrite <- n_plus_assoc in H3. rewrite <- n_plus_assoc in H3.
-rewrite n_plus_comm with (n:=m0) in H3. rewrite n_plus_comm with (n:=m0) in H3.
-rewrite n_plus_assoc in H3. rewrite n_plus_assoc in H3.
-apply n_le_plus in H3.
-apply H3.
+apply n_le_sum in H.
+rewrite n_plus_comm in H. rewrite n_plus_assoc in H. rewrite n_plus_assoc in H.
+apply n_le_plus in H.
+rewrite <- n_plus_assoc in H. rewrite <- n_plus_assoc in H.
+rewrite n_plus_comm in H. rewrite n_plus_comm with (n:=n0) in H.
+apply n_le_plus in H.
+rewrite n_plus_comm. rewrite n_plus_comm with (n:=n1). apply H.
 Qed.
 
 Theorem z_le_antisymmetric : forall (a b : Z),
@@ -225,7 +217,7 @@ apply z_le_total_partial_ordering.
 Qed.
 
 Theorem z_le_plus : forall (a b c : Z),
-  z_le(a, b) -> z_le (z_plus(a, c)) (z_plus(b, c)).
+  z_le(a, b) -> z_le ((z_plus a c), (z_plus b c)).
 Proof.
 destruct a, b, c. simpl. intros.
 rewrite n_plus_assoc. rewrite n_plus_assoc.
@@ -235,9 +227,3 @@ rewrite n_plus_comm with (n:=n1). rewrite n_plus_comm with (n:=n1).
 rewrite n_plus_assoc. rewrite n_plus_assoc.
 apply n_le_plus. apply H.
 Qed.
-
-
-
-
-
-
