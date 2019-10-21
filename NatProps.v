@@ -7,9 +7,17 @@ Theorem n_plus_identity : forall (n : nat),
   n + 0 = n.
 Proof.
 induction n.
-  - reflexivity.
-  - simpl. rewrite IHn. reflexivity.
+- reflexivity.
+- simpl. rewrite IHn. reflexivity.
 Qed. 
+
+Theorem n_plus_one : forall (n : nat),
+  n + 1 = S n.
+Proof.
+induction n.
+- reflexivity.
+- simpl. rewrite IHn. reflexivity.
+Qed.
 
 Theorem n_plus_n_Sm : forall (n m : nat),
   n + S m = S (n + m).
@@ -38,13 +46,15 @@ induction n.
   - simpl. rewrite IHn. reflexivity.
 Qed.
 
-Theorem n_plus_remove : forall (n m k: nat),
-  n + m = n + k -> m = k.
+Theorem n_plus_cancel : forall (n m k: nat),
+  n + k = m + k <-> n = m.
 Proof.
-intros.
-induction n.
-  - simpl in H. apply H.
-  - simpl in H. inversion H. apply IHn. apply H1.
+intros. unfold iff. apply conj.
+- induction k.
+  + rewrite n_plus_identity. rewrite n_plus_identity. intros. apply H.
+  + intros. rewrite n_plus_n_Sm in H. rewrite n_plus_n_Sm in H. 
+    inversion H. apply IHk. apply H1.
+- intros. rewrite H. reflexivity.
 Qed.
 
 Theorem n_mul_identity : forall n : nat,
@@ -296,10 +306,59 @@ Qed.
 Theorem n_le_sum : forall (n m k l : nat),
   n <= m /\ k <= l -> n + k <= m + l.
 Proof.
-intros. apply proj1 in H as H1. apply proj2 in H as H2.
+intros. destruct H as [nm kl].
 apply n_le_transitive with (m:=m+k). split.
-- apply n_le_plus. apply H1.
+- apply n_le_plus. apply nm.
 - rewrite n_plus_comm. rewrite n_plus_comm with (n:=m).
-  apply n_le_plus. apply H2.
+  apply n_le_plus. apply kl.
 Qed.
 
+Theorem n_lt_plus : forall (n m k : nat),
+  n < m <-> n + k < m + k.
+Proof.
+intros. unfold lt.
+rewrite n_plus_comm. rewrite <- n_plus_n_Sm. rewrite n_plus_comm.
+apply n_le_plus.
+Qed.
+
+Theorem n_lt_mul : forall (n m k : nat),
+  n < m /\ 0 < k -> n * k < m * k.
+Proof.
+intros. unfold lt. destruct H as [nm kpos]. apply n_le_mul with (k:=k) in nm.
+simpl in nm. rewrite n_plus_comm in nm. apply n_le_transitive with (m:=n*k+k). apply conj.
+- rewrite <- n_plus_one. rewrite n_plus_comm. rewrite n_plus_comm with (m:=k).
+  apply n_le_plus. apply kpos.
+- apply nm.
+Qed.
+
+Theorem n_le_lt_sum : forall (n m k l : nat),
+  n < m /\ k <= l -> n + k < m + l.
+Proof.
+intros. destruct H as [nm kl].
+unfold lt. rewrite n_plus_comm. rewrite <- n_plus_n_Sm. rewrite n_plus_comm.
+apply n_le_sum. apply conj. apply nm. apply kl.
+Qed.
+
+Theorem n_lt_sum : forall (n m k l : nat),
+  n < m /\ k < l -> n + k < m + l.
+Proof.
+intros. unfold lt. rewrite <- n_plus_n_Sm. apply n_le_lt_sum in H.
+unfold lt in H. apply le_S in H. apply n_le_Sn_Sm. apply H.
+Qed.
+
+Theorem n_lt_lemma1 : forall (n m k l : nat),
+  n < m /\ k < l -> n * l + m * k < n * k + m * l.
+Proof.
+intros. induction l.
+- apply proj2 in H. inversion H.
+- rewrite <- n_plus_one. rewrite n_distributive. rewrite n_distributive.
+  rewrite n_mul_identity. rewrite n_mul_identity.
+  destruct H as [nm kSl]. inversion kSl.
+  + rewrite n_plus_comm with (m:=m). rewrite n_plus_assoc. apply n_lt_plus.
+    rewrite n_plus_comm. rewrite n_plus_comm with (m:=m). apply n_lt_plus.
+    apply nm.
+  + rewrite <- n_plus_assoc. rewrite n_plus_comm with (n:=n).
+    rewrite n_plus_assoc. rewrite n_plus_assoc.
+    apply n_lt_sum. apply conj. apply IHl. 
+    apply conj. apply nm. apply H0. apply nm.
+Qed.
