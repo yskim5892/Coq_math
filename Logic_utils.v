@@ -47,6 +47,35 @@ inversion lem.
   + intros. contradiction.
 Qed.
 
+Theorem contrapositive : forall (P Q: Prop),
+  (P -> Q) <-> (~Q -> ~P).
+Proof.
+intros. unfold iff. apply conj.
+- intros. intro. apply H0. apply H. apply H1.
+- intros. apply not_not_P. intro. apply H in H1. contradiction.
+Qed.
+
+Theorem not_or : forall (P Q: Prop),
+  ~(P \/ Q) <-> ~P /\ ~Q.
+Proof.
+intros. unfold iff. apply conj.
+- intros. apply conj. 
+  + intro. apply H. left. apply H0.
+  + intro. apply H. right. apply H0.
+- intros. destruct H as [nP nQ].
+  intro. destruct H as [P_|Q_]. contradiction. contradiction.
+Qed.
+
+Theorem not_and : forall (P Q: Prop),
+  ~(P /\ Q) <-> ~P \/ ~Q.
+Proof.
+intros. unfold iff. apply conj.
+- intros. apply not_not_P. intro. apply not_or in H0. destruct H0 as [P_ Q_].
+  apply H. apply not_not_P with (P:=P) in P_. apply not_not_P with (P:=Q) in Q_.
+  apply conj. apply P_. apply Q_.
+- intros. intro. destruct H0 as [Pt Qt]. destruct H as [Pf|Qf]. contradiction. contradiction.
+Qed. 
+
 Theorem iff_iff_compat_l : forall A B C : Prop,
 (B <-> C) -> ((A <-> B) <-> (A <-> C)).
 Proof.

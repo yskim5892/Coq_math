@@ -36,12 +36,12 @@ Definition z_1 := z 1 0.
 Notation "a +z b" := (z_plus a b) (at level 50, left associativity).
 Notation "a -z b" := (z_minus a b) (at level 50, left associativity).
 Notation "a *z b" := (z_mul a b) (at level 40, left associativity).
-Notation "- a" := (z_neg a) (at level 35, right associativity).
+Notation "-z a" := (z_neg a) (at level 35, right associativity).
 
 Theorem z_eq_neg : forall (a b : Z),
-  -a = -b -> a = b.
+  -za = -zb -> a = b.
 Proof.
-destruct a, b. simpl. intros. apply z_eq in H. apply z_eq.
+destruct a, b. simpl. intros. apply z_eq in H. apply z_eq. 
 rewrite n_plus_comm. rewrite n_plus_comm with (m:=m). rewrite H. reflexivity.
 Qed.
 
@@ -52,7 +52,7 @@ intros. destruct a. simpl. rewrite n_plus_identity. rewrite n_plus_identity with
 Qed.
 
 Theorem z_plus_inverse : forall (a : Z),
-  a +z -a = z_0.
+  a +z -za = z_0.
 Proof.
 destruct a. simpl. apply z_eq. 
 rewrite n_plus_identity. simpl. apply n_plus_comm.
@@ -71,17 +71,15 @@ destruct a, b, c. simpl. rewrite n_plus_assoc. rewrite n_plus_assoc with (n:=m).
 Qed.
 
 Theorem z_plus_cancel : forall (a b c : Z),
-  a +z c = b +z c <-> a = b.
+  a +z c = b +z c -> a = b.
 Proof.
-intros. unfold iff. apply conj.
-- intros. destruct a, b, c. simpl in H. apply z_eq in H. apply z_eq.
-  rewrite n_plus_assoc in H. rewrite n_plus_assoc in H.
-  apply n_plus_cancel in H.
-  rewrite <- n_plus_assoc in H. rewrite <- n_plus_assoc in H.
-  rewrite n_plus_comm with (n:=n1) in H. rewrite n_plus_comm with (n:=n1) in H.
-  rewrite n_plus_assoc in H. rewrite n_plus_assoc in H.
-  apply n_plus_cancel in H. apply H.
-- intros. rewrite H. reflexivity.
+intros. destruct a, b, c. simpl in H. apply z_eq in H. apply z_eq.
+rewrite n_plus_assoc in H. rewrite n_plus_assoc in H.
+apply n_plus_cancel in H.
+rewrite <- n_plus_assoc in H. rewrite <- n_plus_assoc in H.
+rewrite n_plus_comm with (n:=n1) in H. rewrite n_plus_comm with (n:=n1) in H.
+rewrite n_plus_assoc in H. rewrite n_plus_assoc in H.
+apply n_plus_cancel in H. apply H.
 Qed.
 
 Theorem z_mul_identity : forall (a : Z),
@@ -102,7 +100,7 @@ rewrite n_plus_identity. reflexivity.
 Qed.
 
 Theorem z_mul_neg : forall (a b : Z),
-  a *z (-b) = -(a *z b).
+  a *z (-zb) = -z(a *z b).
 Proof.
 destruct a, b. simpl. apply z_eq. reflexivity.
 Qed.
@@ -260,14 +258,14 @@ apply z_le_total_partial_ordering.
 Qed.
 
 Theorem z_le_neg : forall (a b : Z),
-  a <=z b -> -b <=z -a.
+  a <=z b -> -zb <=z -za.
 Proof.
   destruct a, b. simpl. intros.
   rewrite n_plus_comm. rewrite n_plus_comm with (n:=m). apply H.
 Qed.
 
 Theorem z_lt_neg : forall (a b : Z),
-  a <z b -> -b <z -a.
+  a <z b -> -zb <z -za.
 Proof.
   destruct a, b. simpl. intros.
   rewrite n_plus_comm. rewrite n_plus_comm with (n:=m). apply H.
@@ -374,6 +372,12 @@ apply leH in lab. destruct lab as [lab|eqab].
 - rewrite eqab. apply z_le_total_partial_ordering.
 Qed.
 
+Theorem z_pos_nonzero : forall (a : Z),
+  z_0 <z a -> a <> z_0.
+Proof.
+intros. intro. rewrite H0 in H. inversion H.
+Qed.
+
 Theorem z_mul_cancel : forall (a b c : Z),
   a *z c = b *z c /\ ~ c = z_0 -> a = b.
 Proof.
@@ -412,11 +416,26 @@ destruct (total z_0 c) as [c_pos|c_neg].
 Qed.
 
 Theorem z_mul_a_b_zero : forall (a b : Z),
-  a *z b = z_0 -> a = z_0 \/ b = z_0.
+  a *z b = z_0 <-> a = z_0 \/ b = z_0.
 Proof.
-intros. destruct (law_of_excluded_middle (b=z_0)).
-- right. apply H0.
-- left. apply z_mul_cancel with (c:=b). apply conj.
-  + rewrite H. rewrite z_mul_comm. rewrite z_mul_zero. reflexivity.
-  + apply H0.
+intros. unfold iff. apply conj. 
+- destruct (law_of_excluded_middle (b=z_0)).
+  + right. apply H.
+  + left. apply z_mul_cancel with (c:=b). apply conj.
+    * rewrite H0. rewrite z_mul_comm. rewrite z_mul_zero. reflexivity.
+    * apply H.
+- intros. destruct H as [a0|b0].
+  + rewrite a0. destruct b. apply z_eq. reflexivity.
+  + rewrite b0. destruct a. apply z_eq. rewrite n_mul_zero. rewrite n_mul_zero. reflexivity.
+Qed.
+
+Theorem z_mul_a_b_nonzero : forall (a b : Z),
+  a <> z_0 /\ b <> z_0 <-> a *z b <> z_0.
+Proof.
+intros. unfold iff. apply conj.
+- intros. intros contra. apply z_mul_a_b_zero in contra. destruct contra.
+  apply H in H0. contradiction. apply H in H0. contradiction.
+- intros. apply not_or. intro. destruct H0 as [a0|b0].
+  + rewrite a0 in H. destruct b. contradiction.
+  + rewrite b0 in H. destruct a. rewrite z_mul_comm in H. simpl in H. contradiction.
 Qed.
