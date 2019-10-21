@@ -1,4 +1,4 @@
-DIGEST 48bfc7d6b1a64cee081efa5a9dfe22f8
+DIGEST fa318ff39ce4b4dfc98b94305cf242d4
 FRelation
 prf 8:14 <> pair_eq
 R43:43 Relation <> A var
@@ -201,23 +201,23 @@ R1321:1328 Relation <> Relation def
 R1332:1332 Relation <> A var
 R1330:1330 Relation <> A var
 R1359:1359 Relation <> A var
+R1370:1373 Coq.Init.Logic <> ::type_scope:x_'->'_x not
 R1381:1384 Coq.Init.Logic <> ::type_scope:x_'->'_x not
 R1386:1388 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R1385:1385 Relation <> a var
 R1389:1389 Relation <> b var
-R1370:1373 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
-R1363:1363 Relation <> R var
-R1364:1364 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
-R1366:1367 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
-R1369:1369 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
-R1365:1365 Relation <> a var
-R1368:1368 Relation <> b var
 R1374:1374 Relation <> R var
 R1375:1375 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
 R1377:1378 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
 R1380:1380 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
 R1376:1376 Relation <> b var
 R1379:1379 Relation <> a var
+R1363:1363 Relation <> R var
+R1364:1364 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1366:1367 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1369:1369 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1365:1365 Relation <> a var
+R1368:1368 Relation <> b var
 def 1404:1413 <> asymmetric
 R1423:1430 Relation <> Relation def
 R1434:1434 Relation <> A var
@@ -242,6 +242,7 @@ R1522:1529 Relation <> Relation def
 R1533:1533 Relation <> A var
 R1531:1531 Relation <> A var
 R1562:1562 Relation <> A var
+R1573:1576 Coq.Init.Logic <> ::type_scope:x_'->'_x not
 R1584:1587 Coq.Init.Logic <> ::type_scope:x_'->'_x not
 R1588:1588 Relation <> R var
 R1589:1589 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
@@ -249,19 +250,18 @@ R1591:1592 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
 R1594:1594 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
 R1590:1590 Relation <> a var
 R1593:1593 Relation <> c var
-R1573:1576 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
-R1566:1566 Relation <> R var
-R1567:1567 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
-R1569:1570 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
-R1572:1572 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
-R1568:1568 Relation <> a var
-R1571:1571 Relation <> b var
 R1577:1577 Relation <> R var
 R1578:1578 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
 R1580:1581 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
 R1583:1583 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
 R1579:1579 Relation <> b var
 R1582:1582 Relation <> c var
+R1566:1566 Relation <> R var
+R1567:1567 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1569:1570 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1572:1572 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1568:1568 Relation <> a var
+R1571:1571 Relation <> b var
 def 1609:1617 <> reflexive
 R1628:1635 Relation <> Relation def
 R1639:1639 Relation <> A var
@@ -279,46 +279,46 @@ R1721:1721 Relation <> B var
 R1719:1719 Relation <> A var
 R1750:1750 Relation <> A var
 R1757:1757 Relation <> B var
+R1769:1772 Coq.Init.Logic <> ::type_scope:x_'->'_x not
 R1781:1784 Coq.Init.Logic <> ::type_scope:x_'->'_x not
 R1787:1789 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R1785:1786 Relation <> a1 var
 R1790:1791 Relation <> a2 var
-R1769:1772 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
-R1761:1761 Relation <> R var
-R1762:1762 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
-R1765:1766 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
-R1768:1768 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
-R1763:1764 Relation <> a1 var
-R1767:1767 Relation <> b var
 R1773:1773 Relation <> R var
 R1774:1774 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
 R1777:1778 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
 R1780:1780 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
 R1775:1776 Relation <> a2 var
 R1779:1779 Relation <> b var
+R1761:1761 Relation <> R var
+R1762:1762 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1765:1766 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1768:1768 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1763:1764 Relation <> a1 var
+R1767:1767 Relation <> b var
 def 1806:1815 <> functional
 R1828:1835 Relation <> Relation def
 R1839:1839 Relation <> B var
 R1837:1837 Relation <> A var
 R1864:1864 Relation <> A var
 R1875:1875 Relation <> B var
+R1887:1890 Coq.Init.Logic <> ::type_scope:x_'->'_x not
 R1899:1902 Coq.Init.Logic <> ::type_scope:x_'->'_x not
 R1905:1907 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R1903:1904 Relation <> b1 var
 R1908:1909 Relation <> b2 var
-R1887:1890 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
-R1879:1879 Relation <> R var
-R1880:1880 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
-R1882:1883 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
-R1886:1886 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
-R1881:1881 Relation <> a var
-R1884:1885 Relation <> b1 var
 R1891:1891 Relation <> R var
 R1892:1892 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
 R1894:1895 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
 R1898:1898 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
 R1893:1893 Relation <> a var
 R1896:1897 Relation <> b2 var
+R1879:1879 Relation <> R var
+R1880:1880 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1882:1883 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1886:1886 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1881:1881 Relation <> a var
+R1884:1885 Relation <> b1 var
 def 1924:1933 <> one_to_one
 R1946:1953 Relation <> Relation def
 R1957:1957 Relation <> B var

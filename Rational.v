@@ -13,7 +13,10 @@ match r with
 end.
 
 Axiom q_eq : forall (a b c d : Z),
-  b <> z_0 /\ d <> z_0 /\ z_mul a d = z_mul b c <-> q a b = q c d.
+  b <> z_0 -> d <> z_0 -> z_mul a d = z_mul b c -> q a b = q c d.
+
+Axiom q_eq2 : forall (a b c d : Z),
+  q a b = q c d -> b <> z_0 /\ d <> z_0 /\ z_mul a d = z_mul b c.
 
 Definition q_plus (r s : ZxZ) : ZxZ :=
 match r with
@@ -55,38 +58,37 @@ Notation "-q r" := (q_neg r) (at level 35, right associativity).
 Notation "r ^-1q" := (q_inv r) (at level 35, right associativity).
 
 Theorem q_nonzero : forall (r : ZxZ),
-  Q r /\ r <> q_0 ->  match r with
+  Q r -> r <> q_0 ->  match r with
     | q a b => a <> z_0 /\ z_0 <z b
 end.
 Proof.
-intros. destruct r. unfold Q in H. apply conj. destruct H as [Qr neqr0].
-intros aeq0. apply neqr0. rewrite aeq0. apply q_eq. apply conj. 
-- intro. rewrite H in Qr. simpl in Qr. inversion Qr.
-- apply conj. discriminate. rewrite z_mul_zero. rewrite z_mul_comm. rewrite z_mul_zero. reflexivity.
-- apply H.
+intros r Qr rn0. destruct r. unfold Q in Qr. apply conj.
+intros a0. apply rn0. rewrite a0. apply q_eq. 
+- intro. rewrite H in Qr. inversion Qr.
+- discriminate.
+- rewrite z_mul_zero. rewrite z_mul_comm. rewrite z_mul_zero. reflexivity.
+- apply Qr.
 Qed.
 
 Theorem q_reduction : forall (a b c : Z),
-  b <> z_0 /\ c <> z_0 -> q a b = q (z_mul a c)(z_mul b c).
+  b <> z_0 -> c <> z_0 -> q a b = q (z_mul a c)(z_mul b c).
 Proof.
-intros. apply q_eq. apply conj. apply H.
-apply conj. apply z_mul_a_b_nonzero. apply H.
-rewrite z_mul_comm. rewrite z_mul_comm with (a:=a).
-rewrite z_mul_assoc. reflexivity.
+intros a b c bn0 cn0. apply q_eq. apply bn0. apply (z_mul_a_b_nonzero b c bn0 cn0).
+rewrite z_mul_comm. rewrite z_mul_comm with (a:=a). rewrite z_mul_assoc. reflexivity.
 Qed.
 
 Theorem q_closed_under_plus : forall (r s : ZxZ),
-  Q r /\ Q s -> Q (r +q s).
+  Q r -> Q s -> Q (r +q s).
 Proof.
-destruct r, s. unfold q_plus. unfold Q. intro.
-apply z_lt_mul in H. rewrite z_mul_comm in H. rewrite z_mul_zero in H. apply H.
+destruct r, s. unfold q_plus. unfold Q. intros bpos b0pos.
+pose (H:= z_lt_mul z_0 b b0 bpos b0pos). rewrite z_mul_comm in H. rewrite z_mul_zero in H. apply H.
 Qed. 
 
 Theorem q_closed_under_mul : forall (r s : ZxZ),
-  Q r /\ Q s -> Q (r *q s).
+  Q r -> Q s -> Q (r *q s).
 Proof.
-destruct r, s. unfold q_mul. unfold Q. intro.
-apply z_lt_mul in H. rewrite z_mul_comm in H. rewrite z_mul_zero in H. apply H.
+destruct r, s. unfold q_mul. unfold Q. intros bpos b0pos.
+pose (H:= z_lt_mul z_0 b b0 bpos b0pos). rewrite z_mul_comm in H. rewrite z_mul_zero in H. apply H.
 Qed.
 
 Theorem q_closed_under_neg : forall (r : ZxZ),
@@ -96,24 +98,24 @@ destruct r. unfold q_neg. unfold Q. intro. apply H.
 Qed.
 
 Theorem q_closed_under_inv : forall (r : ZxZ),
-  Q r /\ r <> q_0 -> Q (r ^-1q).
+  Q r -> r <> q_0 -> Q (r ^-1q).
 Proof.
-destruct r. intro. apply q_nonzero in H. 
+intros r Qr rn0. pose (rH:= q_nonzero r Qr rn0). destruct r. 
 pose (H0 := z_lt_total_strict_ordering). destruct H0 as [strict total].
 destruct (total z_0 a) as [a_pos | a_neg].
 - unfold q_inv. unfold Q. apply a_pos.
 - destruct a_neg as [a_neg | a0]. 
   + unfold q_inv. rewrite q_reduction with (c:=-z z_1). 
     rewrite z_mul_neg. rewrite z_mul_neg. rewrite z_mul_identity. rewrite z_mul_identity.
-    unfold Q. apply z_lt_neg in a_neg. apply a_neg. apply conj. apply H. intro. discriminate.
-  + apply eq_sym in a0. apply H in a0. contradiction.
+    unfold Q. apply z_lt_neg in a_neg. apply a_neg. apply rH. intro. discriminate.
+  + apply eq_sym in a0. apply rH in a0. contradiction.
 Qed.
 
 Theorem q_eq_neg : forall (r s : ZxZ),
   -qr = -qs -> r = s.
 Proof.
 destruct r, s. simpl.
-intros. apply q_eq in H. apply q_eq. apply conj. apply H. apply conj. apply H.
+intros. apply q_eq2 in H. apply q_eq. apply H. apply H.
 apply proj2 in H. apply proj2 in H. rewrite z_mul_neg in H. rewrite z_mul_comm in H.
 rewrite z_mul_neg in H. apply z_eq_neg in H. rewrite z_mul_comm in H. apply H.
 Qed.
@@ -122,8 +124,8 @@ Theorem q_eq_inv : forall (r s : ZxZ),
   Q r /\ Q s /\ r ^-1q = s ^-1q -> r = s.
 Proof.
 destruct r, s. unfold Q.
-intro. apply q_eq. apply conj. apply z_pos_nonzero. apply H. apply conj. apply z_pos_nonzero. apply H.
-apply proj2 in H. apply proj2 in H. apply q_eq in H. apply eq_sym. apply H.
+intro. apply q_eq. apply z_pos_nonzero. apply H. apply z_pos_nonzero. apply H.
+apply proj2 in H. apply proj2 in H. apply q_eq2 in H. apply eq_sym. apply H.
 Qed.
 
 Theorem q_plus_identity : forall (r : ZxZ),
@@ -137,11 +139,10 @@ Qed.
 Theorem q_plus_inverse : forall (r : ZxZ),
   Q r -> r +q -qr = q_0.
 Proof.
-intros. destruct r. simpl. apply q_eq. unfold Q in H.
-apply conj.
-- apply z_mul_a_b_nonzero. apply conj. apply z_pos_nonzero. apply H. apply z_pos_nonzero. apply H.
-- apply conj. intro. discriminate. 
-  rewrite z_mul_zero. rewrite z_mul_neg. rewrite z_mul_comm with (a:=a).
+intros. destruct r. simpl. apply q_eq. apply z_pos_nonzero in H.
+- apply (z_mul_a_b_nonzero b b H H). 
+- intro. discriminate. 
+- rewrite z_mul_zero. rewrite z_mul_neg. rewrite z_mul_comm with (a:=a).
   rewrite z_plus_inverse. reflexivity.
 Qed.
 
@@ -167,10 +168,10 @@ Qed.
 Theorem q_plus_cancel : forall (r s t : ZxZ),
   r +q t = s +q t -> r = s.
 Proof.
-intros. destruct r, s, t. simpl in H. apply q_eq in H. destruct H as [nonzero H].
-apply <- z_mul_a_b_nonzero in nonzero. destruct nonzero as [bn0 b1n0]. destruct H as [nonzero H].
-apply <- z_mul_a_b_nonzero in nonzero. destruct nonzero as [b0n0].
-apply q_eq. apply conj. apply bn0. apply conj. apply b0n0.
+intros. destruct r, s, t. simpl in H. apply q_eq2 in H. destruct H as [nonzero H].
+apply z_mul_a_b_nonzero2 in nonzero. destruct nonzero as [bn0 b1n0]. destruct H as [nonzero H].
+apply z_mul_a_b_nonzero2 in nonzero. destruct nonzero as [b0n0].
+apply q_eq. apply bn0. apply b0n0.
 rewrite z_mul_assoc in H. rewrite <- z_mul_assoc with (a:=b) in H. rewrite z_mul_comm with (a:=b1) in H.
 rewrite z_mul_assoc in H. 
 assert ((a *z b1 +z b *z a1) *z b0 = b *z (a0 *z b1 +z b0 *z a1)).
@@ -187,16 +188,15 @@ Theorem q_mul_identity : forall (r : ZxZ),
   r *q q_1 = r.
 Proof.
 intros. destruct r. simpl.
-rewrite z_mul_identity. rewrite z_mul_identity.
-reflexivity.
+rewrite z_mul_identity. rewrite z_mul_identity. reflexivity.
 Qed.
 
 Theorem q_mul_inverse : forall (r : ZxZ),
-  Q r /\ r <> q_0 -> r *q r ^-1q = q_1.
+  Q r -> r <> q_0 -> r *q r ^-1q = q_1.
 Proof.
-intros. destruct r. simpl. apply q_nonzero in H. apply q_eq. apply conj.
-apply z_mul_a_b_nonzero. apply conj. apply z_pos_nonzero. apply H. apply H.
-apply conj. discriminate. rewrite z_mul_identity. rewrite z_mul_identity. apply z_mul_comm.
+intros r Qr rn0. pose (rH:=q_nonzero r Qr rn0). destruct r. simpl. apply q_eq.
+apply z_mul_a_b_nonzero. apply z_pos_nonzero. apply rH. apply rH.
+discriminate. rewrite z_mul_identity. rewrite z_mul_identity. apply z_mul_comm.
 Qed.
 
 Theorem q_mul_zero : forall (r : ZxZ),
@@ -204,17 +204,17 @@ Theorem q_mul_zero : forall (r : ZxZ),
 Proof.
 intros. destruct r. simpl. unfold Q in H.
 rewrite z_mul_zero. rewrite z_mul_identity. apply q_eq.
-apply conj. apply z_pos_nonzero. apply H. apply conj. intro. discriminate.
-rewrite z_mul_zero. rewrite z_mul_comm. rewrite z_mul_zero. reflexivity.
+apply (z_pos_nonzero b H). discriminate.
+rewrite z_mul_zero. reflexivity.
 Qed.
 
 Theorem q_mul_neg : forall (r s : ZxZ),
-  Q r /\ Q s -> r *q (-qs) = -q(r *q s).
+  Q r -> Q s -> r *q (-qs) = -q(r *q s).
 Proof.
-destruct r, s. unfold Q. intros. apply q_eq.
+destruct r, s. unfold Q. intros. 
 assert (b *z b0 <> z_0).
-{ apply z_mul_a_b_nonzero. apply conj. apply z_pos_nonzero. apply H. apply z_pos_nonzero. apply H. }
-apply conj. apply H0. apply conj. apply H0.
+{ apply z_pos_nonzero in H. apply z_pos_nonzero in H0. apply (z_mul_a_b_nonzero b b0 H H0). }
+apply q_eq. apply H1. apply H1.
 rewrite z_mul_comm. rewrite z_mul_neg. rewrite z_mul_neg. reflexivity.
 Qed.
 
@@ -226,7 +226,7 @@ rewrite z_mul_comm. rewrite z_mul_comm with (a:=b). reflexivity.
 Qed.
 
 Theorem q_distributive : forall (r s t : ZxZ),
-  Q r /\ Q s /\ Q t -> r *q (s +q t) = (r *q s) +q (r *q t).
+  Q r -> Q s -> Q t -> r *q (s +q t) = (r *q s) +q (r *q t).
 Proof.
 intros. destruct r, s, t. simpl. unfold Q in H.
 
@@ -246,18 +246,77 @@ rewrite z_mul_comm with (a:=b).
 rewrite z_mul_assoc with (a:=b0).
 reflexivity.
 
-apply conj. apply z_mul_a_b_nonzero. apply conj. apply z_pos_nonzero. apply H.
-apply z_mul_a_b_nonzero. apply conj. apply z_pos_nonzero. apply H. apply z_pos_nonzero. apply H. apply z_pos_nonzero. apply H.
+apply z_mul_a_b_nonzero. apply (z_pos_nonzero b0 H0).
+apply z_mul_a_b_nonzero. apply (z_pos_nonzero b H). apply (z_pos_nonzero b1 H1). apply (z_pos_nonzero b H).
 Qed.
 
 Theorem q_mul_assoc : forall (r s t : ZxZ),
-  Q r /\ Q s /\ Q t -> r *q (s *q t) = (r *q s) *q t.
+  Q r -> Q s -> Q t -> r *q (s *q t) = (r *q s) *q t.
 Proof.
-destruct r, s, t. unfold Q. intros. apply q_eq.
-assert (b <> z_0 /\ b0 <> z_0 /\ b1 <> z_0).
-{ apply conj. apply z_pos_nonzero. apply H. apply conj. apply z_pos_nonzero. apply H. apply z_pos_nonzero. apply H. }
-
-apply conj. apply z_mul_a_b_nonzero. apply conj. apply H0. apply z_mul_a_b_nonzero. apply H0.
-apply conj. apply z_mul_a_b_nonzero. apply conj. apply z_mul_a_b_nonzero. apply conj. apply H0. apply H0. apply H0.
+destruct r, s, t. unfold Q. intros.
+assert (b *z b0 *z b1 <> z_0).
+{ apply z_mul_a_b_nonzero. apply z_mul_a_b_nonzero. apply (z_pos_nonzero b H).
+  apply (z_pos_nonzero b0 H0). apply (z_pos_nonzero b1 H1). }
+apply q_eq.
+rewrite z_mul_assoc. apply H2. apply H2.
 rewrite z_mul_comm. rewrite z_mul_assoc with (c:=b1). rewrite z_mul_assoc with (c:=a1). reflexivity.
 Qed.
+
+(* inequality *)
+
+Definition q_le : Relation ZxZ ZxZ :=
+fun p => match p with
+| (r, s) => ( match r with
+  | q a b => match s with
+    | q c d => a *z d <=z b *z c
+    end
+  end)
+end.
+
+Definition q_lt : Relation ZxZ ZxZ :=
+fun p => match p with
+| (r, s) => ( match r with
+  | q a b => match s with
+    | q c d => a *z d <=z b *z c
+    end
+  end)
+end.
+
+Definition q_ge : Relation ZxZ ZxZ :=
+fun p => match p with
+| (r, s) => q_le (s, r)
+end.
+
+Definition q_gt : Relation ZxZ ZxZ :=
+fun p => match p with
+| (r, s) => q_lt (s, r)
+end.
+
+Notation "r <=q s" := (q_le (r, s)) (at level 70, no associativity).
+Notation "r <q s"  := (q_lt (r, s)) (at level 70, no associativity).
+Notation "r >=q s" := (q_ge (r, s)) (at level 70, no associativity).
+Notation "r >q s"  := (q_gt (r, s)) (at level 70, no associativity).
+
+Theorem q_le_reflexive : forall (r : ZxZ),
+  r <=q r.
+Proof.
+destruct r. unfold q_le. rewrite z_mul_comm. apply z_le_reflexive.
+Qed.
+
+Theorem q_le_transitive : forall (r s t : ZxZ),
+  Q r -> Q s -> Q t -> r <=q s -> s <=q t -> r <=q t.
+Proof.
+destruct r, s, t. unfold q_le. unfold Q. intros bpos b0pos b1pos rs st.
+rewrite z_lt_is_strict_z_le in bpos. apply proj1 in bpos.
+rewrite z_lt_is_strict_z_le in b1pos. apply proj1 in b1pos.
+pose (rs' := z_le_mul (a*zb0) (b*za0) b1 rs b1pos).
+pose (st' := z_le_mul (a0*zb1)(b0*za1) b st bpos).
+rewrite z_mul_comm in st'. rewrite z_mul_assoc in st'.
+pose (rt := z_le_transitive (a*zb0*zb1) (b*za0*zb1) (b0*za1*zb) rs' st').
+rewrite <- z_mul_assoc in rt. rewrite z_mul_comm with (b:=b1) in rt. rewrite z_mul_assoc in rt.
+rewrite <- z_mul_assoc with (c:=b) in rt. rewrite z_mul_comm with (a:=b0) in rt.
+rewrite z_mul_comm with (a:=a1) in rt.
+apply (z_le_mul2 (a*zb1) (b*za1) b0 rt b0pos).
+Qed.
+
+

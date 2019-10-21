@@ -38,22 +38,22 @@ Definition symmetric {A} (R : Relation A A) : Prop :=
 forall (a b : A), R(a, b) -> R(b, a).
 
 Definition antisymmetric {A} (R : Relation A A) : Prop :=
-forall (a b : A), R(a, b) /\ R(b, a) -> a = b.
+forall (a b : A), R(a, b) -> R(b, a) -> a = b.
 
 Definition asymmetric {A} (R: Relation A A) : Prop :=
 forall (a b : A), R(a, b) -> not (R(b, a)).
 
 Definition transitive {A} (R: Relation A A) : Prop :=
-forall (a b c : A), R(a, b) /\ R(b, c) -> R(a, c).
+forall (a b c : A), R(a, b) -> R(b, c) -> R(a, c).
 
 Definition reflexive {A} (R : Relation A A) : Prop :=
 forall (a : A), R(a, a).
 
 Definition injective {A B} (R : Relation A B) : Prop :=
-forall (a1 a2 : A)(b : B), R(a1, b) /\ R(a2, b) -> a1 = a2.
+forall (a1 a2 : A)(b : B), R(a1, b) -> R(a2, b) -> a1 = a2.
 
 Definition functional {A B} (R : Relation A B) : Prop :=
-forall (a : A)(b1 b2 : B), R(a, b1) /\ R(a, b2) -> b1 = b2.
+forall (a : A)(b1 b2 : B), R(a, b1) -> R(a, b2) -> b1 = b2.
 
 Definition one_to_one {A B} (R : Relation A B) : Prop :=
 injective R /\ functional R.

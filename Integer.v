@@ -189,10 +189,10 @@ destruct a. simpl. apply le_n.
 Qed.
 
 Theorem z_le_transitive : forall (a b c : Z),
-  a <=z b /\ b <=z c -> a <=z c.
+  a <=z b -> b <=z c -> a <=z c.
 Proof.
-destruct a, b, c. simpl. intros.
-apply n_le_sum in H.
+destruct a, b, c. simpl. intros ab bc.
+pose (H:=n_le_sum (n+m0) (n0+m) (n0+m1) (n1+m0) ab bc).
 rewrite n_plus_comm in H. rewrite n_plus_assoc in H. rewrite n_plus_assoc in H.
 apply n_le_plus in H.
 rewrite <- n_plus_assoc in H. rewrite <- n_plus_assoc in H.
@@ -202,18 +202,16 @@ rewrite n_plus_comm. rewrite n_plus_comm with (n:=n1). apply H.
 Qed.
 
 Theorem z_le_antisymmetric : forall (a b : Z),
-  a <=z b /\ b <=z a -> a = b.
+  a <=z b -> b <=z a -> a = b.
 Proof.
-destruct a, b. simpl. intros.
-apply n_le_antisymmetric in H. apply z_eq.
-apply H.
+destruct a, b. simpl. intros ab ba.
+apply n_le_antisymmetric in ba. apply z_eq. apply ba. apply ab.
 Qed.
 
 Theorem z_le_total_ordering : forall (a b : Z),
   a <=z b \/ b <=z a.
 Proof.
-intros. destruct a, b. simpl.
-apply n_le_total_partial_ordering.
+intros. destruct a, b. simpl. apply n_le_total_partial_ordering.
 Qed.
 
 Theorem z_le_total_partial_ordering : total_partial_ordering z_le.
@@ -231,11 +229,9 @@ Theorem z_lt_is_strict_z_le : z_lt = partial_to_strict z_le.
 Proof.
 assert (nl : forall (n m: nat), n_lt (n, m) <-> partial_to_strict n_le (n, m)).
 { apply Relation_eq. apply n_lt_is_strict_n_le. }
-unfold partial_to_strict in nl.
 
 apply Relation_eq. intros. unfold partial_to_strict.
 destruct a, b.
-unfold z_lt, z_le.
 assert (zneq : z n m <> z n0 m0 <-> n + m0 <> n0 + m).
 { apply not_iff_compat. apply iff_sym. apply z_eq. }
 apply and_iff_compat_l with (A:=n+m0<=n0+m) in zneq.
@@ -290,10 +286,11 @@ destruct a, b, c. simpl. unfold iff. apply conj.
 Qed.
 
 Theorem z_le_sum : forall (a b c d : Z),
-  a <=z b /\ c <=z d -> a +z c <=z b +z d.
+  a <=z b -> c <=z d -> a +z c <=z b +z d.
 Proof.
-destruct a, b, c, d. simpl. intros H.
-apply n_le_sum in H. rewrite <- n_plus_assoc. rewrite <- n_plus_assoc.
+destruct a, b, c, d. simpl. intros ab cd.
+pose (H:=n_le_sum (n+m0) (n0+m) (n1+m2) (n2+m1) ab cd).
+rewrite <- n_plus_assoc. rewrite <- n_plus_assoc.
 rewrite n_plus_assoc with (n:=n1). rewrite n_plus_assoc with (n:=n2).
 rewrite n_plus_comm with (n:=n1). rewrite n_plus_comm with (n:=n2).
 rewrite <- n_plus_assoc. rewrite <- n_plus_assoc.
@@ -303,50 +300,40 @@ Qed.
 Theorem z_lt_plus : forall (a b c : Z),
   a <z b <-> a +z c <z b +z c.
 Proof.
-intros. assert (ltH : forall (a' b': Z), z_lt (a', b') <-> partial_to_strict z_le (a', b')).
-{ apply Relation_eq. apply z_lt_is_strict_z_le. }
-unfold partial_to_strict in ltH.
-unfold iff. apply conj.
-- intros lab. apply ltH in lab. apply ltH. 
-  apply conj.
-  + apply proj1 in lab. apply z_le_plus. apply lab.
-  + intros ac_eq_bc. apply z_plus_cancel in ac_eq_bc. apply lab in ac_eq_bc. contradiction.
-- intros lacbc. apply ltH in lacbc. apply ltH.
-  apply conj.
-  + apply proj1 in lacbc. apply z_le_plus in lacbc. apply lacbc.
-  + intros a_eq_b. rewrite a_eq_b in lacbc. apply lacbc. reflexivity.
+intros. apply conj.
+- rewrite z_lt_is_strict_z_le. intros ab. apply conj.
+  + apply z_le_plus. apply ab.
+  + intros eqacbc. apply z_plus_cancel in eqacbc. apply ab in eqacbc. contradiction.
+- rewrite z_lt_is_strict_z_le. intros acbc. apply conj.
+  + apply proj1 in acbc. apply z_le_plus in acbc. apply acbc.
+  + intros eqab. rewrite eqab in acbc. apply acbc. reflexivity.
 Qed.
 
 Theorem z_le_lt_sum : forall (a b c d : Z),
-  a <z b /\ c <=z d -> a +z c <z b +z d.
+  a <z b -> c <=z d -> a +z c <z b +z d.
 Proof.
-intros. assert (ltH : forall (a' b': Z), z_lt (a', b') <-> partial_to_strict z_le (a', b')).
-{ apply Relation_eq. apply z_lt_is_strict_z_le. }
-destruct H as [lab lcd]. apply ltH in lab. apply ltH. apply conj.
-- apply proj1 in lab. apply z_le_sum. apply conj. apply lab. apply lcd.
-- intros ac_eq_bd. apply z_le_plus with (c:=a) in lcd. rewrite z_plus_comm in lcd. rewrite z_plus_comm with (a:=d) in lcd.
-  rewrite ac_eq_bd in lcd. apply z_le_plus in lcd. 
+intros a b c d ab cd.
+rewrite z_lt_is_strict_z_le in ab. rewrite z_lt_is_strict_z_le. apply conj.
+- apply z_le_sum. apply ab. apply cd.
+- intros ac_eq_bd. apply z_le_plus with (c:=a) in cd. rewrite z_plus_comm in cd. rewrite z_plus_comm with (a:=d) in cd.
+  rewrite ac_eq_bd in cd. apply z_le_plus in cd. 
   pose (leH := z_le_total_partial_ordering). destruct leH as [partial total].
   destruct partial as [refl anti]. apply proj1 in anti.
-  destruct lab as [lab a_neq_b]. apply a_neq_b in anti. contradiction.
-  apply conj. apply lab. apply lcd.
+  destruct ab as [ab a_neq_b]. apply a_neq_b in anti. contradiction.
+  apply ab. apply cd.
 Qed.
 
 Theorem z_lt_sum : forall (a b c d : Z),
-  a <z b /\ c <z d -> a +z c <z b +z d.
+  a <z b -> c <z d -> a +z c <z b +z d.
 Proof.
-intros. assert (ltH : forall (a' b': Z), z_lt (a', b') <-> partial_to_strict z_le (a', b')).
-{ apply Relation_eq. apply z_lt_is_strict_z_le. }
-destruct H as [lab lcd]. apply ltH in lcd.
-apply z_le_lt_sum. apply conj. apply lab. apply lcd.
+intros a b c d ab cd.
+rewrite z_lt_is_strict_z_le in cd. apply z_le_lt_sum. apply ab. apply cd.
 Qed.
 
-
 Theorem z_lt_mul : forall (a b c : Z),
-  a <z b /\ z_0 <z c -> a *z c <z b *z c.
+  a <z b -> z_0 <z c -> a *z c <z b *z c.
 Proof.
-destruct a, b, c. simpl. intros.
-rewrite n_plus_identity in H.
+destruct a, b, c. simpl. intros ab cpos. rewrite n_plus_identity in cpos.
 rewrite <- n_plus_assoc. rewrite n_plus_assoc with (n:=m*m1). 
 rewrite <- n_right_distributive. rewrite n_plus_comm with (m:=m0*n1).
 rewrite n_plus_assoc. rewrite <- n_right_distributive. rewrite n_plus_comm with (n:=m).
@@ -356,20 +343,44 @@ rewrite <- n_right_distributive. rewrite n_plus_comm with (m:=m*n1).
 rewrite n_plus_assoc. rewrite <- n_right_distributive. rewrite n_plus_comm with (m:=n).
 rewrite n_plus_comm with (n:=(n0+m)*n1).
 
-apply n_lt_lemma1. apply H.
+apply n_lt_lemma1. apply ab. apply cpos.
 Qed.
 
-Theorem z_le_mul : forall (a b c : Z),
-  a <=z b /\ z_0 <=z c -> a *z c <=z b *z c.
+Theorem z_lt_mul2 : forall (a b c : Z),
+  a *z c <z b *z c -> z_0 <z c -> a <z b.
 Proof.
-intros. assert (leH : forall (a' b': Z), z_le (a', b') <-> strict_to_partial z_lt (a', b')).
-{ apply Relation_eq. apply z_le_is_partial_z_lt. } unfold strict_to_partial in leH.
-destruct H as [lab l0c].
-apply leH in lab. destruct lab as [lab|eqab].
-- apply leH in l0c. destruct l0c as [l0c|c0].
-  + apply leH. left. apply z_lt_mul. apply conj. apply lab. apply l0c.
+intros a b c acbc cpos.
+destruct z_lt_total_strict_ordering as [strict total].
+destruct (total a b) as [ab|ba].
+- apply ab.
+- destruct ba as [ba|eq].
+  + pose (bcac := z_lt_mul b a c ba cpos). apply strict in bcac. contradiction.
+  + rewrite eq in acbc. apply strict in acbc as bcac. contradiction.
+Qed. 
+
+Theorem z_le_mul : forall (a b c : Z),
+  a <=z b -> z_0 <=z c -> a *z c <=z b *z c.
+Proof.
+intros a b c ab cpos.
+rewrite z_le_is_partial_z_lt in ab. destruct ab as [ab|eqab].
+- rewrite z_le_is_partial_z_lt in cpos. destruct cpos as [cpos|c0].
+  + rewrite z_le_is_partial_z_lt. left. apply z_lt_mul. apply ab. apply cpos.
   + rewrite <- c0. rewrite z_mul_zero. rewrite z_mul_zero. simpl. apply le_n.
 - rewrite eqab. apply z_le_total_partial_ordering.
+Qed.
+
+Theorem z_le_mul2 : forall (a b c : Z),
+  a *z c <=z b *z c -> z_0 <z c -> a <=z b.
+Proof.
+intros a b c acbc cpos.
+destruct z_lt_total_strict_ordering as [strict total].
+destruct (total a b) as [ab|ba].
+- rewrite z_lt_is_strict_z_le in ab. apply ab.
+- destruct ba as [ba|eq].
+  + pose (bcac := z_lt_mul b a c ba cpos).
+    rewrite z_lt_is_strict_z_le in bcac. destruct bcac.
+    apply z_le_total_partial_ordering in acbc. apply acbc in H. apply eq_sym in H. contradiction.
+  + rewrite eq. apply z_le_total_partial_ordering.
 Qed.
 
 Theorem z_pos_nonzero : forall (a : Z),
@@ -381,38 +392,30 @@ Qed.
 Theorem z_mul_cancel : forall (a b c : Z),
   a *z c = b *z c /\ ~ c = z_0 -> a = b.
 Proof.
-intros a b c.
-pose z_lt_total_strict_ordering as H.
-destruct H as [strict total].
-unfold strict_ordering in strict. apply proj1 in strict. unfold asymmetric in strict.
-assert (lemma : forall (a' b' c' : Z), z_lt(a', b') /\ z_lt (z_0, c') -> not (z_mul a' c' = z_mul b' c')).
-{ intros. apply z_lt_mul in H. intros acbc.
-  rewrite acbc in H. apply strict in H as contr. contradiction. }
-
-destruct (total z_0 c) as [c_pos|c_neg].
-- intros ac_eq_bc. apply proj1 in ac_eq_bc.
-  destruct (total a b) as [lab|lba].
-  + apply (lemma a b c) in ac_eq_bc. contradiction.
-    apply conj. apply lab. apply c_pos.
-  + destruct lba as [lba|a_eq_b].
-    * apply eq_sym in ac_eq_bc. apply (lemma b a c) in ac_eq_bc. contradiction.
-      apply conj. apply lba. apply c_pos.
-    * rewrite a_eq_b. reflexivity.
+intros a b c. 
+pose z_lt_total_strict_ordering as H. destruct H as [strict total].
+intros eqacbc. destruct (total z_0 c) as [c_pos|c_neg].
+- apply proj1 in eqacbc. destruct (total a b) as [ab|ba].
+  + pose (acbc:= z_lt_mul a b c ab c_pos). rewrite eqacbc in acbc.
+    apply z_lt_total_strict_ordering in acbc as bcac. contradiction.
+  + destruct ba as [ba|eqab]. 
+    * pose (bcac:= z_lt_mul b a c ba c_pos). rewrite eqacbc in bcac.
+      apply z_lt_total_strict_ordering in bcac as acbc. contradiction.
+    * apply eqab. 
 - destruct c_neg as [c_neg|c0].
-  + intros ac_eq_bc. apply proj1 in ac_eq_bc.
-    set (nc := z_neg c). apply z_lt_neg in c_neg. simpl z_neg in c_neg.
-    replace c with (z_neg (z_neg c)) in ac_eq_bc.
-    rewrite z_mul_neg in ac_eq_bc. rewrite z_mul_neg with (a:=b) in ac_eq_bc.
-    apply z_eq_neg in ac_eq_bc. 
-    destruct (total a b) as [lab|lba].
-    * apply (lemma a b nc) in ac_eq_bc. contradiction.
-      apply conj. apply lab. apply c_neg.
-    * destruct lba as [lba|a_eq_b].
-      --  apply eq_sym in ac_eq_bc. apply (lemma b a nc) in ac_eq_bc. contradiction.
-          apply conj. apply lba. apply c_neg.
-      --  apply a_eq_b.
-    * destruct c. reflexivity. 
-  + intros. apply proj2 in H. apply eq_sym in c0. contradiction.
+  + apply proj1 in eqacbc. set (nc := z_neg c). apply z_lt_neg in c_neg. simpl z_neg in c_neg.
+    replace c with (z_neg (z_neg c)) in eqacbc.
+    rewrite z_mul_neg in eqacbc. rewrite z_mul_neg with (a:=b) in eqacbc.
+    apply z_eq_neg in eqacbc.
+    destruct (total a b) as [ab|ba].
+    * pose (acbc:= z_lt_mul a b (-z c) ab c_neg). rewrite eqacbc in acbc.
+      apply z_lt_total_strict_ordering in acbc as bcac. contradiction.
+    * destruct ba as [ba|eqab]. 
+      --  pose (bcac:= z_lt_mul b a (-z c) ba c_neg). rewrite eqacbc in bcac.
+          apply z_lt_total_strict_ordering in bcac as acbc. contradiction.
+      -- apply eqab.
+    * destruct c. reflexivity.
+  + apply proj2 in eqacbc. apply eq_sym in c0. contradiction.
 Qed.
 
 Theorem z_mul_a_b_zero : forall (a b : Z),
@@ -430,12 +433,16 @@ intros. unfold iff. apply conj.
 Qed.
 
 Theorem z_mul_a_b_nonzero : forall (a b : Z),
-  a <> z_0 /\ b <> z_0 <-> a *z b <> z_0.
+  a <> z_0 -> b <> z_0 -> a *z b <> z_0.
 Proof.
-intros. unfold iff. apply conj.
-- intros. intros contra. apply z_mul_a_b_zero in contra. destruct contra.
-  apply H in H0. contradiction. apply H in H0. contradiction.
-- intros. apply not_or. intro. destruct H0 as [a0|b0].
-  + rewrite a0 in H. destruct b. contradiction.
-  + rewrite b0 in H. destruct a. rewrite z_mul_comm in H. simpl in H. contradiction.
+intros a b an0 bn0. intros ab0. apply z_mul_a_b_zero in ab0. destruct ab0 as [a0|b0].
+apply an0 in a0. contradiction. apply bn0 in b0. contradiction.
+Qed.
+
+Theorem z_mul_a_b_nonzero2 : forall (a b : Z),
+  a *z b <> z_0 -> a <> z_0 /\ b <> z_0.
+Proof.
+intros. apply conj.
+- intro. rewrite H0 in H. destruct b. simpl in H. contradiction.
+- intro. rewrite H0 in H. destruct a. rewrite z_mul_comm in H. simpl in H. contradiction.
 Qed.

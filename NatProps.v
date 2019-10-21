@@ -171,14 +171,13 @@ unfold iff. intros. apply conj.
 Qed.
 
 Theorem n_le_transitive : forall (n m k : nat),
-  n <= m /\ m <= k -> n <= k.
+  n <= m -> m <= k -> n <= k.
 Proof.
-intros. induction k.
-- inversion H. inversion H1. rewrite H2 in H0. 
-  inversion H0. apply le_n.
-- inversion H. apply n_le_n_S_m in H1. inversion H1.
-  + apply le_S. apply IHk. apply conj. apply H0. apply H2.
-  + rewrite H2 in H0. apply H0.
+induction k.
+- intros nm m0. inversion m0 as [meq0|]. rewrite meq0 in nm. apply nm.
+- intros nm mSk. inversion mSk as [meqSk | m0  mk].
+  + rewrite meqSk in nm. apply nm.
+  + apply le_S. apply IHk. apply nm. apply mk.
 Qed.
 
 Theorem n_le_Sn_n_false : forall (n : nat),
@@ -189,7 +188,7 @@ induction n.
 - intros H. inversion H.
   + apply IHn. rewrite H1. apply le_n.
   + apply IHn. apply n_le_transitive with (m:= S (S n)).
-    apply conj. apply le_S. apply le_n. apply H1.
+    apply le_S. apply le_n. apply H1.
 Qed.
 
 Theorem n_le_Sn_Sm : forall (n m : nat),
@@ -199,30 +198,23 @@ unfold iff. intros. apply conj.
 - intros. inversion H.
   + apply le_n.
   + apply n_le_transitive with (m:=S n)(k := m).
-    apply conj. apply le_S. apply le_n.
-    apply H1.
+    apply le_S. apply le_n. apply H1.
 - intros. induction m.
   + inversion H. apply le_n.
   + inversion H. 
     * apply le_n.
     * apply IHm in H1. apply n_le_transitive with (m:=S m).
-      apply conj. apply H1. apply le_S. apply le_n.
+      apply H1. apply le_S. apply le_n.
 Qed.
 
 Theorem n_le_antisymmetric : forall (n m : nat),
-  n <= m /\ m <= n <-> n = m.
+  n <= m -> m <= n -> n = m.
 Proof.
-unfold iff. intros. apply conj.
-- intros. apply proj1 in H as H1. apply proj2 in H as H2.
-  inversion H1.
-  + reflexivity.
-  + assert (contra : S m0 <= m0).
-    rewrite <- H3 in H2. apply n_le_transitive with (m:=n).
-    apply conj. apply H2. apply H0.
-    apply n_le_Sn_n_false in contra. inversion contra.
-- intros. apply conj.
-  + rewrite H. apply le_n.
-  + rewrite H. apply le_n.
+intros n m nm mn. inversion nm.
++ reflexivity.
++ assert (contra : S m0 <= m0).
+  { rewrite <- H0 in mn. apply n_le_transitive with (m:=n). apply mn. apply H. }
+  apply n_le_Sn_n_false in contra. contradiction.
 Qed.
 
 Theorem n_le_total_ordering : forall (n m : nat),
@@ -251,13 +243,12 @@ Qed.
 Theorem n_lt_is_strict_n_le : n_lt = partial_to_strict n_le.
 Proof.
 apply Relation_eq. intros. unfold iff. apply conj.
-- intros. unfold partial_to_strict. apply conj.
-  + apply n_le_Sn_Sm. apply n_le_transitive with (m:=b). apply conj.
+- intros. apply conj.
+  + apply n_le_Sn_Sm. apply n_le_transitive with (m:=b).
     apply H. apply le_S. apply le_n.
-  + intros contra. rewrite contra in H. apply n_le_Sn_n_false in H.
-    contradiction.
-- intros. unfold partial_to_strict in H. destruct H as [le_a_b neq].
-  inversion le_a_b.
+  + intros eq. rewrite eq in H. apply n_le_Sn_n_false in H. contradiction.
+- intros. destruct H as [leab neq].
+  inversion leab.
   + contradiction.
   + apply n_le_Sn_Sm. apply H.
 Qed.
@@ -297,17 +288,16 @@ intros. induction k.
 - rewrite n_mul_zero. rewrite n_mul_zero. apply le_n.
 - rewrite n_mul_comm. rewrite n_mul_comm with (n:=m).
   simpl. rewrite n_mul_comm. rewrite n_mul_comm with (m:=m).
-  apply n_le_transitive with (m:=n+m*k). apply conj.
+  apply n_le_transitive with (m:=n+m*k).
   + rewrite n_plus_comm. rewrite n_plus_comm with (n:=n).
     apply n_le_plus. apply IHk.
   + apply n_le_plus. apply H.
 Qed. 
 
 Theorem n_le_sum : forall (n m k l : nat),
-  n <= m /\ k <= l -> n + k <= m + l.
+  n <= m -> k <= l -> n + k <= m + l.
 Proof.
-intros. destruct H as [nm kl].
-apply n_le_transitive with (m:=m+k). split.
+intros n m k l nm kl. apply n_le_transitive with (m:=m+k).
 - apply n_le_plus. apply nm.
 - rewrite n_plus_comm. rewrite n_plus_comm with (n:=m).
   apply n_le_plus. apply kl.
@@ -322,43 +312,41 @@ apply n_le_plus.
 Qed.
 
 Theorem n_lt_mul : forall (n m k : nat),
-  n < m /\ 0 < k -> n * k < m * k.
+  n < m -> 0 < k -> n * k < m * k.
 Proof.
-intros. unfold lt. destruct H as [nm kpos]. apply n_le_mul with (k:=k) in nm.
-simpl in nm. rewrite n_plus_comm in nm. apply n_le_transitive with (m:=n*k+k). apply conj.
+intros n m k nm kpos. apply n_le_mul with (k:=k) in nm.
+simpl in nm. rewrite n_plus_comm in nm. apply n_le_transitive with (m:=n*k+k).
 - rewrite <- n_plus_one. rewrite n_plus_comm. rewrite n_plus_comm with (m:=k).
   apply n_le_plus. apply kpos.
 - apply nm.
 Qed.
 
 Theorem n_le_lt_sum : forall (n m k l : nat),
-  n < m /\ k <= l -> n + k < m + l.
+  n < m -> k <= l -> n + k < m + l.
 Proof.
-intros. destruct H as [nm kl].
-unfold lt. rewrite n_plus_comm. rewrite <- n_plus_n_Sm. rewrite n_plus_comm.
-apply n_le_sum. apply conj. apply nm. apply kl.
+intros n m k l nm kl.
+rewrite n_plus_comm. unfold lt. rewrite <- n_plus_n_Sm. rewrite n_plus_comm.
+apply n_le_sum. apply nm. apply kl.
 Qed.
 
 Theorem n_lt_sum : forall (n m k l : nat),
-  n < m /\ k < l -> n + k < m + l.
+  n < m -> k < l -> n + k < m + l.
 Proof.
-intros. unfold lt. rewrite <- n_plus_n_Sm. apply n_le_lt_sum in H.
-unfold lt in H. apply le_S in H. apply n_le_Sn_Sm. apply H.
+intros n m k l nm kl. apply n_le_lt_sum. apply nm. apply le_S in kl. apply n_le_Sn_Sm. apply kl.
 Qed.
 
 Theorem n_lt_lemma1 : forall (n m k l : nat),
-  n < m /\ k < l -> n * l + m * k < n * k + m * l.
+  n < m -> k < l -> n * l + m * k < n * k + m * l.
 Proof.
-intros. induction l.
-- apply proj2 in H. inversion H.
+intros n m k l nm kl. induction l.
+- inversion kl.
 - rewrite <- n_plus_one. rewrite n_distributive. rewrite n_distributive.
   rewrite n_mul_identity. rewrite n_mul_identity.
-  destruct H as [nm kSl]. inversion kSl.
+  inversion kl.
   + rewrite n_plus_comm with (m:=m). rewrite n_plus_assoc. apply n_lt_plus.
     rewrite n_plus_comm. rewrite n_plus_comm with (m:=m). apply n_lt_plus.
     apply nm.
   + rewrite <- n_plus_assoc. rewrite n_plus_comm with (n:=n).
     rewrite n_plus_assoc. rewrite n_plus_assoc.
-    apply n_lt_sum. apply conj. apply IHl. 
-    apply conj. apply nm. apply H0. apply nm.
+    apply n_lt_sum. apply IHl. apply H0. apply nm.
 Qed.

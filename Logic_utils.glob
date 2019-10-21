@@ -1,4 +1,4 @@
-DIGEST c031d92b7a89697d7791cb3c58e0a6cc
+DIGEST aa651ae659d2a3121c4f1a227fb6965d
 FLogic_utils
 ax 6:27 <> law_of_excluded_middle
 R51:54 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
@@ -216,3 +216,23 @@ R2647:2653 Coq.Init.Logic <> iff_sym thm
 R2647:2653 Coq.Init.Logic <> iff_sym thm
 R2691:2699 Coq.Init.Logic <> iff_trans thm
 R2691:2699 Coq.Init.Logic <> iff_trans thm
+prf 2747:2758 <> and_to_imply
+R2785:2785 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R2799:2805 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R2817:2817 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R2786:2786 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2793:2797 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2798:2798 Logic_utils <> C var
+R2788:2791 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R2787:2787 Logic_utils <> A var
+R2792:2792 Logic_utils <> B var
+R2807:2810 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2812:2815 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2816:2816 Logic_utils <> C var
+R2811:2811 Logic_utils <> B var
+R2806:2806 Logic_utils <> A var
+R2842:2844 Coq.Init.Logic <> iff def
+R2853:2856 Coq.Init.Logic <> conj constr
+R2853:2856 Coq.Init.Logic <> conj constr
+R2884:2887 Coq.Init.Logic <> conj constr
+R2884:2887 Coq.Init.Logic <> conj constr

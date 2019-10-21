@@ -91,3 +91,11 @@ intros. apply iff_to_and. apply conj.
 - intros. apply iff_trans with (B:=B). apply iff_sym. apply H. apply H0.
 - intros. apply iff_trans with (B:=C). apply H. apply H0.
 Qed.
+
+Theorem and_to_imply : forall A B C : Prop,
+  ((A /\ B) -> C) <-> (A -> B -> C).
+Proof.
+intros. unfold iff. apply conj.
+- intros. apply H. apply conj. apply H0. apply H1.
+- intros. apply H. apply H0. apply H0.
+Qed.
